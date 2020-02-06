@@ -1,7 +1,9 @@
-Odd Pins - Left
-Even Pins - Right
-GND Pins - 12, 30
-Vcc Pins - 11, 29
+GPIO pin locations:
+    Odd Pins - Left
+    Even Pins - Right
+    GND Pins - 12, 30
+    Vcc Pins - 11, 29
+50MHz Clk   PIN_AF14
 GPIO[0]		PIN_W15
 GPIO[1]		PIN_AK2
 GPIO[2]		PIN_Y16
@@ -19,4 +21,14 @@ GPIO[13]	PIN_AG5
 GPIO[14]	PIN_AG6
 GPIO[15]	PIN_AG7
 GPIO[16]	PIN_AG8
-GPIO[17]
+
+LEDR[0]     PIN_AA24
+LEDR[1]     PIN_AB23
+LEDR[2]     PIN_AC23
+LEDR[3]     PIN_AD24
+LEDR[4]     PIN_AG25
+LEDR[5]     PIN_AF25
+LEDR[6]     PIN_AE24
+LEDR[7]     PIN_AF24
+LEDR[8]     PIN_AB22
+LEDR[9]     PIN_AC22
