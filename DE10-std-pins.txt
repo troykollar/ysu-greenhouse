@@ -32,4 +32,5 @@ LEDR[6]     PIN_AE24
 LEDR[7]     PIN_AF24
 LEDR[8]     PIN_AB22
 LEDR[9]     PIN_AC22
-addition
+
+ADC Range 0 - 4.096V
