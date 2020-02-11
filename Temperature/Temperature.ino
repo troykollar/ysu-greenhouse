@@ -2,7 +2,6 @@ int state=1;                                              //This is the initial 
 int numstates=10;                                         //This is the number of readings you'll average together
 int tpa=0;                                                //This is the temperature of taking the average of numstates number of points  ie if numstates=10 youre taking a ten point average
 int temps[10];                                            //This is the array that temporarily stores the ten temps we will average
-int cycle=1;
 void setup() {
 pinMode(LED_BUILTIN,OUTPUT);
 pinMode(7, OUTPUT);
@@ -71,7 +70,6 @@ void TempPrint(int x, int y, int z){
     Serial.print(tpa);
     Serial.print("   ");
     state=1;
-    cycle=1;
     tpa=0;
   }
   temps[state]=(x+y+z)/3;
