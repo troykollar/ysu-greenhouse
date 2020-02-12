@@ -11,7 +11,8 @@ DHT dht2(DHTPIN2, DHTTYPE);               // Initialize DHT sensor for normal 16
 DHT dht3(DHTPIN3, DHTTYPE);               // Initialize DHT sensor for normal 16mhz Arduino
 //Variables
 int chk;
-float tempSend;                               //DAC temperature value being sent to the FPGA
+float tempCSend;                               //DAC temperature value being sent to the FPGA in C
+float tempFSend;                              //DAC temperature value being sent to the FPGA in F
 float humSend;                                //DAC humidity value being sent to the FPGA
 float hum1;                                  //Stores humidity value
 float temp_C1;                               //Stores temperature value
@@ -49,14 +50,14 @@ void loop()
     //Read data and store it to variables hum and temp
     tempAvg=(temp_C1+temp_C2+temp_C3)/3;
     humAvg=(hum1+hum2+hum3)/3;
-    temp_F=tempAvg*1.8+32;                     //Convert celsius to farenheit
     
     if(temp_F<60 || temp_F>120){              //If temperature readings are far from what they should be, send an error to the FPGA
       digitalWrite(7, HIGH);
     }
-    tempSend=DAC_temp(temp_F);                 //Converts farenheit into an integer for the FPGA to read
+    tempCSend=DAC_temp(tempAvg);            //Converts farenheit into an integer for the FPGA to read
+    tempFSend=tempCSend*1.8+32;                     //Convert celsius to farenheit
     humSend=DAC_hum(humAvg);
-    analogWrite(10, tempSend);
+    analogWrite(10, tempFSend);
     analogWrite(11, humSend);
     
     
@@ -67,14 +68,14 @@ void loop()
     Serial.print("   Humidity:");
     Serial.print(humAvg);
     Serial.print("%   Temp DAC:");
-    Serial.print(tempSend);
+    Serial.print(tempFSend);
     Serial.print("   Hum DAC:");
     Serial.println(humSend);
 }
 
 
 float DAC_temp(float x){                            //Converts temp in f to a DAC value between 409-819 (2V-4V)
- float y = ((x/200)*409)+409;
+ float y = (((x+40)/120)*409)+409;
  return y;
 }
 
