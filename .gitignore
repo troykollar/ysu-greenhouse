@@ -1,1 +1,8 @@
-FPGA/
+#Ignore FPGA folder
+FPGA/*
+
+#Don't ignore verilog files
+!FPGA/*.v
+!FPGA/*.qpf
+!FPGA/*.qsf
+!FPGA/*.sdc
