@@ -215,7 +215,7 @@ always @(posedge clk)
     else if (voltage < 12'hF8B)	temp_c_signed[9:0] <=	10'd782;
     else if (voltage < 12'hF95)	temp_c_signed[9:0] <=	10'd788;
     else if (voltage < 12'hF9F)	temp_c_signed[9:0] <=	10'd794;
-    else                        temp_c_signed[9:0] <=	10'd800;
+    else                        temp_c_signed[9:0] <=	10'd0;
 
 always @(posedge clk)
     if (voltage < 12'h7d0)      temp_f_signed[9:0] <= 10'd0;
