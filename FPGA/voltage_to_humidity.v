@@ -206,3 +206,5 @@ always @(posedge clk)
     else if (voltage <= 12'hF9F)	humidity <=	10'd995;
     else if (voltage <= 12'hFFF)	humidity <=	10'd1000;
     else                            humidity <= 10'd0;
+
+endmodule

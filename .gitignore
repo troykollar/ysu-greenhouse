@@ -1,8 +1,12 @@
 #Ignore FPGA folder
 FPGA/*
-
 #Don't ignore verilog files
 !FPGA/*.v
+
+#Don't ignore important project files
 !FPGA/*.qpf
 !FPGA/*.qsf
 !FPGA/*.sdc
+
+#Don't ignore adc_controller folder
+!FPGA/adc_controller/
