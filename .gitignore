@@ -1,6 +1,1 @@
-#Ignore everything
-/*
-
-#Don't ignore these files
-!.gitignore
-!*.v
+./FPGA/
