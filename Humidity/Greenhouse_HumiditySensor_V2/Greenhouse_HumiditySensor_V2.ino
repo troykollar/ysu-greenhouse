@@ -62,27 +62,23 @@ void loop()
     
     
     //Print temp and humidity values to serial monitor
-    Serial.print("Humidity: ");
-    Serial.print(hum1);
-    Serial.print("   ");
-    Serial.println(hum2);
-    
-//    Serial.print(" ");
-//    Serial.print(humSend);
-//    Serial.print(" %, Temp: ");
-//    Serial.print(temp_F);
-//    Serial.print(" ");
-//    Serial.print(tempSend);
-//    Serial.println(" Farenheit");
+    Serial.print("Temp(F): ");
+    Serial.print(temp_F);
+    Serial.print("   Humidity:");
+    Serial.print(humAvg);
+    Serial.print("%   Temp DAC:");
+    Serial.print(tempSend);
+    Serial.print("   Hum DAC:");
+    Serial.println(humSend);
 }
 
 
-float DAC_temp(float x){                            //Converts temp in f to a DAC value between 0-1024
- float y = (x/200)*1024;
+float DAC_temp(float x){                            //Converts temp in f to a DAC value between 409-819 (2V-4V)
+ float y = ((x/200)*409)+409;
  return y;
 }
 
-float DAC_hum(float x){                             //Converts hum in % to a DAC value between 0-1024
- float y = (x/100)*1024;
+float DAC_hum(float x){                             //Converts hum in % to a DAC value between 409-819 (2V-4V)
+ float y = ((x/100)*409)+409;
  return y;
 }
