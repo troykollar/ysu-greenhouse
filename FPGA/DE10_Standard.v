@@ -54,13 +54,55 @@ module DE10_Standard(
 //  REG/WIRE declarations
 //=======================================================
 
-
-
+wire [11:0] adc_values [7:0];
+wire [10:0] temp_c;
+wire [11:0] temp_f;
+assign LEDR = adc_values [0] [11:1];
 
 //=======================================================
 //  Structural coding
 //=======================================================
 
+adc_controller ADC (
+	.CLOCK (CLOCK_50),
+	.RESET (!KEY[0]),
+	.ADC_SCLK (ADC_SCLK),
+	.ADC_CS_N (ADC_CONVST),
+	.ADC_DOUT (ADC_DOUT),
+	.ADC_DIN (ADC_DIN),
+	.CH0 (adc_values[0]),
+	.CH1 (adc_values[1]),
+	.CH2 (adc_values[2]),
+	.CH3 (adc_values[3]),
+	.CH4 (adc_values[4]),
+	.CH5 (adc_values[5]),
+	.CH6 (adc_values[6]),
+	.CH7 (adc_values[7])
+);
 
+voltage_to_temp v_to_temp (
+	.clk (CLOCK_50),
+	.voltage (adc_values [0]),
+	.temp_c_signed(temp_c),
+	.temp_f_signed(temp_f)
+);
+
+val_to_seven_seg hex0 (
+	.clk (CLOCK_50),
+	.value (temp_f[3:0]),
+	.display_segs (HEX0)
+);
+
+val_to_seven_seg hex1 (
+	.clk (CLOCK_50),
+	.value (temp_f[7:4]),
+	.display_segs (HEX1)
+);
+
+val_to_seven_seg hex2 (
+	.clk (CLOCK_50),
+	.value ({1'b0, temp_f[10:8]}),
+	.display_segs (HEX2)
+);
 
 endmodule
