@@ -1,0 +1,3 @@
+temp_control(input wire [10:0] current_temp, output reg heater, output reg ac);
+humidity_control(input wire[9:0] current_humidity, output reg humidifier, output reg dehumidifier);
+light_control(input wire [11:0] light_level_adc, output reg light);
