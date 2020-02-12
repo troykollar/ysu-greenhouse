@@ -1,18 +1,19 @@
-
-
 int Power;
 void setup() {
-pinMode(7, OUTPUT);
-pinMode(5, INPUT);
+pinMode(12, OUTPUT);
+//Serial.begin(9600);
 }
 
 void loop() {
-    Power=digitalRead(5);
-    if (Power == 0){
-      digitalWrite(LED_BUILTIN, HIGH);
+    Power=analogRead(A0);
+    //Serial.print(Power);
+    //Serial.print("   ");
+    if (Power < 500){
+      digitalWrite(12, HIGH);
+      delay(2000);
     }
     else{
-      digitalWrite(LED_BUILTIN, LOW);
+      digitalWrite(12, LOW);
     }
-    delay(250);
+    delay(50);
 }
