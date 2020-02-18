@@ -13,9 +13,11 @@ void loop() {
     if (Power < 700){                 //Sets darkness threshold to turn the lights on
       digitalWrite(12, HIGH);         //Turns relay 1 on
       digitalWrite(11, HIGH);         //Turns realy 2 on
+      digitalWrite(10, HIGH);         //Turn FPGA light signal off
       delay(2000);                    //Keep the lights on for 2 sec
       digitalWrite(12, LOW);          //Turn relay 1 off
       delay(1500);                    //Wait 1.5sec
       digitalWrite(11, LOW);          //Turn relay 2 off
+      digitalWrite(10, LOW);          //Turn FPGA light signal off
     }
 }
