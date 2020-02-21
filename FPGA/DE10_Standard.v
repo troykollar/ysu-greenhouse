@@ -60,15 +60,13 @@ module DE10_Standard(
 	wire [11:0] temp_f;
 	assign LEDR = adc_values [0] [11:1];
 
-	//VGA
-	
-
 //=======================================================
 //  Structural coding
 //=======================================================
 
 display_controller display(
 	.CLOCK_50(CLOCK_50),
+	.MODULE1_STATUS(~KEY),	//Set to keybuttons for testing
 	.VGA_BLANK_N(VGA_BLANK_N),
 	.VGA_CLK(VGA_CLK),
 	.VGA_R(VGA_R),
