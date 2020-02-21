@@ -331,13 +331,15 @@ set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name VERILOG_FILE DE10_Standard.v
+set_global_assignment -name VERILOG_FILE vga_controller_640x480.v
+set_global_assignment -name VERILOG_FILE display_controller.v
 set_global_assignment -name VERILOG_FILE voltage_to_temp.v
 set_global_assignment -name VERILOG_FILE voltage_to_humidity.v
 set_global_assignment -name VERILOG_FILE val_to_seven_seg.v
 set_global_assignment -name QSYS_FILE adc_controller/adc_controller.qsys
 set_global_assignment -name SDC_FILE DE10_Standard.SDC
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

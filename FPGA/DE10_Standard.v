@@ -30,11 +30,11 @@ module DE10_Standard(
 
 	//////////// VGA //////////
 	output		          		VGA_BLANK_N,
-	output		     [7:0]		VGA_B,
+	output 			[7:0]		VGA_B,
 	output		          		VGA_CLK,
-	output		     [7:0]		VGA_G,
+	output  		[7:0]		VGA_G,
 	output		          		VGA_HS,
-	output		     [7:0]		VGA_R,
+	output  		[7:0]		VGA_R,
 	output		          		VGA_SYNC_N,
 	output		          		VGA_VS,
 
@@ -54,14 +54,29 @@ module DE10_Standard(
 //  REG/WIRE declarations
 //=======================================================
 
-wire [11:0] adc_values [7:0];
-wire [10:0] temp_c;
-wire [11:0] temp_f;
-assign LEDR = adc_values [0] [11:1];
+	//ADC Values
+	wire [11:0] adc_values [7:0];
+	wire [10:0] temp_c;
+	wire [11:0] temp_f;
+	assign LEDR = adc_values [0] [11:1];
+
+	//VGA
+	
 
 //=======================================================
 //  Structural coding
 //=======================================================
+
+display_controller display(
+	.CLOCK_50(CLOCK_50),
+	.VGA_BLANK_N(VGA_BLANK_N),
+	.VGA_CLK(VGA_CLK),
+	.VGA_R(VGA_R),
+	.VGA_G(VGA_G),
+    .VGA_B(VGA_B),
+	.VGA_VS(VGA_VS),
+    .VGA_HS(VGA_HS)
+);
 
 adc_controller ADC (
 	.CLOCK (CLOCK_50),
@@ -104,5 +119,7 @@ val_to_seven_seg hex2 (
 	.value ({1'b0, temp_f[10:8]}),
 	.display_segs (HEX2)
 );
+
+
 
 endmodule
