@@ -1,0 +1,124 @@
+module character_tile_rom(
+    input wire [9:0] x,
+    input [9:0] y,     // x and y location of current pixel
+    output reg [4:0] char_tile_y,   // y coordinate of character tile
+    output reg [6:0] char_tile_x   // x coordinate of character tile
+);
+
+    always @(*)
+        if (y < 10'd16)         char_tile_y =   5'd0;
+        else if	(y < 10'd32)	char_tile_y =	5'd1;
+        else if	(y < 10'd48)	char_tile_y =	5'd2;
+        else if	(y < 10'd64)	char_tile_y =	5'd3;
+        else if	(y < 10'd80)	char_tile_y =	5'd4;
+        else if	(y < 10'd96)	char_tile_y =	5'd5;
+        else if	(y < 10'd112)	char_tile_y =	5'd6;
+        else if	(y < 10'd128)	char_tile_y =	5'd7;
+        else if	(y < 10'd144)	char_tile_y =	5'd8;
+        else if	(y < 10'd160)	char_tile_y =	5'd9;
+        else if	(y < 10'd176)	char_tile_y =	5'd10;
+        else if	(y < 10'd192)	char_tile_y =	5'd11;
+        else if	(y < 10'd208)	char_tile_y =	5'd12;
+        else if	(y < 10'd224)	char_tile_y =	5'd13;
+        else if	(y < 10'd240)	char_tile_y =	5'd14;
+        else if	(y < 10'd256)	char_tile_y =	5'd15;
+        else if	(y < 10'd272)	char_tile_y =	5'd16;
+        else if	(y < 10'd288)	char_tile_y =	5'd17;
+        else if	(y < 10'd304)	char_tile_y =	5'd18;
+        else if	(y < 10'd320)	char_tile_y =	5'd19;
+        else if	(y < 10'd336)	char_tile_y =	5'd20;
+        else if	(y < 10'd352)	char_tile_y =	5'd21;
+        else if	(y < 10'd368)	char_tile_y =	5'd22;
+        else if	(y < 10'd384)	char_tile_y =	5'd23;
+        else if	(y < 10'd400)	char_tile_y =	5'd24;
+        else if	(y < 10'd416)	char_tile_y =	5'd25;
+        else if	(y < 10'd432)	char_tile_y =	5'd26;
+        else if	(y < 10'd448)	char_tile_y =	5'd27;
+        else if	(y < 10'd464)	char_tile_y =	5'd28;
+        else if	(y < 10'd480)	char_tile_y =	5'd29;
+        else                    char_tile_y =   5'd0;
+
+        always @(*)
+            if (x < 10'd8)          char_tile_x =   7'd0;
+            else if	(x < 10'd16)	char_tile_x = 	7'd1;
+            else if	(x < 10'd24)	char_tile_x = 	7'd2;
+            else if	(x < 10'd32)	char_tile_x = 	7'd3;
+            else if	(x < 10'd40)	char_tile_x = 	7'd4;
+            else if	(x < 10'd48)	char_tile_x = 	7'd5;
+            else if	(x < 10'd56)	char_tile_x = 	7'd6;
+            else if	(x < 10'd64)	char_tile_x = 	7'd7;
+            else if	(x < 10'd72)	char_tile_x = 	7'd8;
+            else if	(x < 10'd80)	char_tile_x = 	7'd9;
+            else if	(x < 10'd88)	char_tile_x = 	7'd10;
+            else if	(x < 10'd96)	char_tile_x = 	7'd11;
+            else if	(x < 10'd104)	char_tile_x = 	7'd12;
+            else if	(x < 10'd112)	char_tile_x = 	7'd13;
+            else if	(x < 10'd120)	char_tile_x = 	7'd14;
+            else if	(x < 10'd128)	char_tile_x = 	7'd15;
+            else if	(x < 10'd136)	char_tile_x = 	7'd16;
+            else if	(x < 10'd144)	char_tile_x = 	7'd17;
+            else if	(x < 10'd152)	char_tile_x = 	7'd18;
+            else if	(x < 10'd160)	char_tile_x = 	7'd19;
+            else if	(x < 10'd168)	char_tile_x = 	7'd20;
+            else if	(x < 10'd176)	char_tile_x = 	7'd21;
+            else if	(x < 10'd184)	char_tile_x = 	7'd22;
+            else if	(x < 10'd192)	char_tile_x = 	7'd23;
+            else if	(x < 10'd200)	char_tile_x = 	7'd24;
+            else if	(x < 10'd208)	char_tile_x = 	7'd25;
+            else if	(x < 10'd216)	char_tile_x = 	7'd26;
+            else if	(x < 10'd224)	char_tile_x = 	7'd27;
+            else if	(x < 10'd232)	char_tile_x = 	7'd28;
+            else if	(x < 10'd240)	char_tile_x = 	7'd29;
+            else if	(x < 10'd248)	char_tile_x = 	7'd30;
+            else if	(x < 10'd256)	char_tile_x = 	7'd31;
+            else if	(x < 10'd264)	char_tile_x = 	7'd32;
+            else if	(x < 10'd272)	char_tile_x = 	7'd33;
+            else if	(x < 10'd280)	char_tile_x = 	7'd34;
+            else if	(x < 10'd288)	char_tile_x = 	7'd35;
+            else if	(x < 10'd296)	char_tile_x = 	7'd36;
+            else if	(x < 10'd304)	char_tile_x = 	7'd37;
+            else if	(x < 10'd312)	char_tile_x = 	7'd38;
+            else if	(x < 10'd320)	char_tile_x = 	7'd39;
+            else if	(x < 10'd328)	char_tile_x = 	7'd40;
+            else if	(x < 10'd336)	char_tile_x = 	7'd41;
+            else if	(x < 10'd344)	char_tile_x = 	7'd42;
+            else if	(x < 10'd352)	char_tile_x = 	7'd43;
+            else if	(x < 10'd360)	char_tile_x = 	7'd44;
+            else if	(x < 10'd368)	char_tile_x = 	7'd45;
+            else if	(x < 10'd376)	char_tile_x = 	7'd46;
+            else if	(x < 10'd384)	char_tile_x = 	7'd47;
+            else if	(x < 10'd392)	char_tile_x = 	7'd48;
+            else if	(x < 10'd400)	char_tile_x = 	7'd49;
+            else if	(x < 10'd408)	char_tile_x = 	7'd50;
+            else if	(x < 10'd416)	char_tile_x = 	7'd51;
+            else if	(x < 10'd424)	char_tile_x = 	7'd52;
+            else if	(x < 10'd432)	char_tile_x = 	7'd53;
+            else if	(x < 10'd440)	char_tile_x = 	7'd54;
+            else if	(x < 10'd448)	char_tile_x = 	7'd55;
+            else if	(x < 10'd456)	char_tile_x = 	7'd56;
+            else if	(x < 10'd464)	char_tile_x = 	7'd57;
+            else if	(x < 10'd472)	char_tile_x = 	7'd58;
+            else if	(x < 10'd480)	char_tile_x = 	7'd59;
+            else if	(x < 10'd488)	char_tile_x = 	7'd60;
+            else if	(x < 10'd496)	char_tile_x = 	7'd61;
+            else if	(x < 10'd504)	char_tile_x = 	7'd62;
+            else if	(x < 10'd512)	char_tile_x = 	7'd63;
+            else if	(x < 10'd520)	char_tile_x = 	7'd64;
+            else if	(x < 10'd528)	char_tile_x = 	7'd65;
+            else if	(x < 10'd536)	char_tile_x = 	7'd66;
+            else if	(x < 10'd544)	char_tile_x = 	7'd67;
+            else if	(x < 10'd552)	char_tile_x = 	7'd68;
+            else if	(x < 10'd560)	char_tile_x = 	7'd69;
+            else if	(x < 10'd568)	char_tile_x = 	7'd70;
+            else if	(x < 10'd576)	char_tile_x = 	7'd71;
+            else if	(x < 10'd584)	char_tile_x = 	7'd72;
+            else if	(x < 10'd592)	char_tile_x = 	7'd73;
+            else if	(x < 10'd600)	char_tile_x = 	7'd74;
+            else if	(x < 10'd608)	char_tile_x = 	7'd75;
+            else if	(x < 10'd616)	char_tile_x = 	7'd76;
+            else if	(x < 10'd624)	char_tile_x = 	7'd77;
+            else if	(x < 10'd632)	char_tile_x = 	7'd78;
+            else if	(x < 10'd640)	char_tile_x = 	7'd79;
+            else                    char_tile_x =   7'd0;
+
+endmodule
