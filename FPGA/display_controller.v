@@ -86,7 +86,7 @@ module display_controller(
 
     wire on_zero;
 
-    font16x32(
+    font16x32 #(.x1(50), .y1(50)) testnum(
         .character_code(8'd0),
         .char_start_x(10'd50),
         .char_start_y(10'd50),
