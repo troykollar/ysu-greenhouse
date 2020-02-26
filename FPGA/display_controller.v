@@ -38,7 +38,14 @@ module display_controller(
         .VGA_BLANK_N(VGA_BLANK_N)
     );
 
-    reg R, G, B;
+    wire div_0, div_1, div_2;
+    wire dividers;
+    assign dividers = (div_0 || div_1 || div_2);
+    reg [2:0] RGB;
+    wire R, G, B;
+    assign R = (RGB[2] == 1);
+    assign G = (RGB[1] == 1);
+    assign B = (RGB[0] == 1);
 
     always @(*) begin
         VGA_R = {8{R}};
@@ -46,17 +53,30 @@ module display_controller(
         VGA_B = {8{B}};
     end
 
+    rectangle_display #(.x1(0), .x2(640), .y1(115), .y2(125)) div0(
+        .clk(CLOCK_50),
+        .x(x),
+        .y(y),
+        .on_rectangle(div_0)
+    );
+
+    rectangle_display #(.x1(0), .x2(640), .y1(235), .y2(245)) div1(
+        .clk(CLOCK_50),
+        .x(x),
+        .y(y),
+        .on_rectangle(div_1)
+    );
+
+    rectangle_display #(.x1(0), .x2(640), .y1(355), .y2(365)) div2(
+        .clk(CLOCK_50),
+        .x(x),
+        .y(y),
+        .on_rectangle(div_2)
+    );
+
     // Draw dividing lines
     always @(posedge CLOCK_50)
-        if (draw_zero || draw_one) begin
-            VGA_B <= {8{1'b0}};
-            VGA_R <= {8{1'b0}};
-            VGA_G <= {8{1'b0}}; 
-        end
-        else begin  // White where things are not drawn
-			R <= 1;
-            G <= 1;
-            B <= 1;
-		end
+        if (dividers) RGB <= 3'b000;
+        else          RGB <= 3'b111;
 
 endmodule // display_controller
