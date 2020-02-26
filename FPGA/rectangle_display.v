@@ -10,22 +10,12 @@ module rectangle_display #(
         input wire clk,
         input wire [9:0] x, // x coordinate of pixel being drawn
         input wire [9:0] y, // y coordinate of pixel being drawn
-        output reg R,
-        output reg G,
-        output reg B
+        output reg on_rectangle
     );
 
     always @(*)
-        if ((y > y1) && (y < y2) && (x > x1) && (x < x2)) begin
-            R = 0;
-            B = 0;
-            G = 0;
-        end
-        else begin
-            R = 1;
-            B = 1;
-            G = 1;
-        end
-
+        if ((y > y1) && (y < y2) && (x > x1) && (x < x2))
+            on_rectangle = 1;
+        else    on_rectangle = 0;
 
 endmodule
