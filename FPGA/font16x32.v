@@ -1,7 +1,9 @@
-module font16x32(
+module font16x32 #(
+    parameter x1 = 0,
+    parameter y1 = 0
+)
+(
     input [7:0] character_code,
-    input [9:0] char_start_x,
-    input [9:0] char_start_y,
     input [9:0] x,
     input [9:0] y,
     output wire on_char
@@ -15,10 +17,10 @@ module font16x32(
 
     //2's complement for local pixel location to save hardware
     always @(*)
-        pixel_x = x + (~char_start_x + 1);
+        pixel_x = x + (~x1 + 1);
 
     always @(*)
-        pixel_y = y + (~char_start_y + 1);
+        pixel_y = y + (~y1 + 1);
 
     //On/Off bits of each pixel in character depnding on x location
     reg [0:15] character_x;
@@ -99,7 +101,7 @@ module font16x32(
                 endcase
             8'd2    :
                 case (pixel_y)
-                    
+
             8'd3    :
                 case (pixel_y)
                     5'd0	:	character_x = 	16'b0000000000000000
@@ -140,8 +142,8 @@ module font16x32(
 
         wire in_char_tile_x, in_char_tile_y, in_char_tile;
 
-        assign in_char_tile_x = ((x > char_start_x) && (x < char_start_x + char_width));
-        assign in_char_tile_y = ((y > char_start_y) && (y < char_start_y + char_height));
+        assign in_char_tile_x = ((x > x1) && (x < x1 + char_width));
+        assign in_char_tile_y = ((y > y1) && (y < y1 + char_height));
         assign in_char_tile = in_char_tile_x && in_char_tile_y;
         assign on_char = character_x[pixel_x] && in_char_tile;
 
