@@ -116,6 +116,17 @@ module display_controller(
         .on_temp_display(on_set_temp_display)
     );
 
+    // Test display using smaller text rom
+    wire on_test_text;
+    Pixel_On_Text2 #(.displayText("Test text for smaller font")) test_text(
+        .clk(VGA_CLK),
+        .positionX(250),
+        .positionY(250),
+        .horzCoord(x),
+        .vertCoord(y),
+        .pixel(on_test_text)
+    );
+
 //=======================================================
 //  Set RGB regsiter according to whether or not pixel needs drawn
 //=======================================================
@@ -124,6 +135,7 @@ module display_controller(
         if (dividers) RGB <= 3'b000;    // Draw dividing lines
         else if (on_actual_temp_display)    RGB <= 3'b000;
         else if (on_set_temp_display)       RGB <= 3'b000;
+        else if (on_test_text)              RGB <= 3'b000;
         else          RGB <= 3'b111;    // White where things are not drawn
 
 endmodule // display_controller
