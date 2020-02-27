@@ -342,6 +342,9 @@ set_global_assignment -name QSYS_FILE adc_controller/adc_controller.qsys
 set_global_assignment -name VERILOG_FILE vga_controller_640x480.v
 set_global_assignment -name VERILOG_FILE display_controller.v
 set_global_assignment -name VERILOG_FILE temp_display.v
+set_global_assignment -name VHDL_FILE Pixel_On_Text2.vhd
+set_global_assignment -name VHDL_FILE Font_Rom.vhd
+set_global_assignment -name VHDL_FILE commonPak.vhd
 set_global_assignment -name VERILOG_FILE font16x32.v
 set_global_assignment -name VERILOG_FILE rectangle_display.v
 set_global_assignment -name SDC_FILE DE10_Standard.SDC
