@@ -3,12 +3,13 @@ module font16x32 #(
     parameter y1 = 0
 )
 (
-    input [7:0] character_code,
+    input [3:0] character_code,
     input [9:0] x,
     input [9:0] y,
     output wire on_char
 );
 
+    //TODO: Add pixel maps for 2, 4, 5, 6, 7, 8, 9, degrees, dash
     integer char_width = 16;
     integer char_height = 32;
 
@@ -27,7 +28,7 @@ module font16x32 #(
 
     always @(*)
         case (character_code)
-            8'd0    :
+            4'd0    :
                 case (pixel_y)
                     5'd0	:	character_x = 	16'b0000000000000000;
                     5'd1	:	character_x = 	16'b0001111111111000;
@@ -63,80 +64,129 @@ module font16x32 #(
                     5'd31	:	character_x = 	16'b0000000000000000;
                     default:     character_x =  16'b0000000000000000;
                 endcase
-            8'd1    :
+            4'd1    :
                 case (pixel_y)
-                    5'd0	:	character_x = 	16'b0000000000000000
-                    5'd1	:	character_x = 	16'b0000000110000000
-                    5'd2	:	character_x = 	16'b0000001110000000
-                    5'd3	:	character_x = 	16'b0000011110000000
-                    5'd4	:	character_x = 	16'b0000000110000000
-                    5'd5	:	character_x = 	16'b0000000110000000
-                    5'd6	:	character_x = 	16'b0000000110000000
-                    5'd7	:	character_x = 	16'b0000000110000000
-                    5'd8	:	character_x = 	16'b0000000110000000
-                    5'd9	:	character_x = 	16'b0000000110000000
-                    5'd10	:	character_x = 	16'b0000000110000000
-                    5'd11	:	character_x = 	16'b0000000110000000
-                    5'd12	:	character_x = 	16'b0000000110000000
-                    5'd13	:	character_x = 	16'b0000000110000000
-                    5'd14	:	character_x = 	16'b0000000110000000
-                    5'd15	:	character_x = 	16'b0000000110000000
-                    5'd16	:	character_x = 	16'b0000000110000000
-                    5'd17	:	character_x = 	16'b0000000110000000
-                    5'd18	:	character_x = 	16'b0000000110000000
-                    5'd19	:	character_x = 	16'b0000000110000000
-                    5'd20	:	character_x = 	16'b0000000110000000
-                    5'd21	:	character_x = 	16'b0000000110000000
-                    5'd22	:	character_x = 	16'b0000000110000000
-                    5'd23	:	character_x = 	16'b0000000110000000
-                    5'd24	:	character_x = 	16'b0000000110000000
-                    5'd25	:	character_x = 	16'b0000000110000000
-                    5'd26	:	character_x = 	16'b0000000110000000
-                    5'd27	:	character_x = 	16'b0000000110000000
-                    5'd28	:	character_x = 	16'b0000000110000000
-                    5'd29	:	character_x = 	16'b0001111111111000
-                    5'd30	:	character_x = 	16'b0001111111111000
-                    5'd31	:	character_x = 	16'b0000000000000000
+                    5'd0	:	character_x = 	16'b0000000000000000;
+                    5'd1	:	character_x = 	16'b0000000110000000;
+                    5'd2	:	character_x = 	16'b0000001110000000;
+                    5'd3	:	character_x = 	16'b0000011110000000;
+                    5'd4	:	character_x = 	16'b0000000110000000;
+                    5'd5	:	character_x = 	16'b0000000110000000;
+                    5'd6	:	character_x = 	16'b0000000110000000;
+                    5'd7	:	character_x = 	16'b0000000110000000;
+                    5'd8	:	character_x = 	16'b0000000110000000;
+                    5'd9	:	character_x = 	16'b0000000110000000;
+                    5'd10	:	character_x = 	16'b0000000110000000;
+                    5'd11	:	character_x = 	16'b0000000110000000;
+                    5'd12	:	character_x = 	16'b0000000110000000;
+                    5'd13	:	character_x = 	16'b0000000110000000;
+                    5'd14	:	character_x = 	16'b0000000110000000;
+                    5'd15	:	character_x = 	16'b0000000110000000;
+                    5'd16	:	character_x = 	16'b0000000110000000;
+                    5'd17	:	character_x = 	16'b0000000110000000;
+                    5'd18	:	character_x = 	16'b0000000110000000;
+                    5'd19	:	character_x = 	16'b0000000110000000;
+                    5'd20	:	character_x = 	16'b0000000110000000;
+                    5'd21	:	character_x = 	16'b0000000110000000;
+                    5'd22	:	character_x = 	16'b0000000110000000;
+                    5'd23	:	character_x = 	16'b0000000110000000;
+                    5'd24	:	character_x = 	16'b0000000110000000;
+                    5'd25	:	character_x = 	16'b0000000110000000;
+                    5'd26	:	character_x = 	16'b0000000110000000;
+                    5'd27	:	character_x = 	16'b0000000110000000;
+                    5'd28	:	character_x = 	16'b0000000110000000;
+                    5'd29	:	character_x = 	16'b0001111111111000;
+                    5'd30	:	character_x = 	16'b0001111111111000;
+                    5'd31	:	character_x = 	16'b0000000000000000;
+                    default:    character_x =  16'b0000000000000000;
+                endcase
+            4'd2    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'd3    :
+                case (pixel_y)
+                    5'd0	:	character_x = 	16'b0000000000000000;
+                    5'd1	:	character_x = 	16'b0111111111111110;
+                    5'd2	:	character_x = 	16'b0111111111111110;
+                    5'd3	:	character_x = 	16'b0000000000000110;
+                    5'd4	:	character_x = 	16'b0000000000000110;
+                    5'd5	:	character_x = 	16'b0000000000000110;
+                    5'd6	:	character_x = 	16'b0000000000001100;
+                    5'd7	:	character_x = 	16'b0000000000011100;
+                    5'd8	:	character_x = 	16'b0000000000111000;
+                    5'd9	:	character_x = 	16'b0000000000110000;
+                    5'd10	:	character_x = 	16'b0000000000110000;
+                    5'd11	:	character_x = 	16'b0000000001100000;
+                    5'd12	:	character_x = 	16'b0000000001100000;
+                    5'd13	:	character_x = 	16'b0000000011000000;
+                    5'd14	:	character_x = 	16'b0000000111000000;
+                    5'd15	:	character_x = 	16'b0000000111111100;
+                    5'd16	:	character_x = 	16'b0000000111111110;
+                    5'd17	:	character_x = 	16'b0000000000000110;
+                    5'd18	:	character_x = 	16'b0000000000000110;
+                    5'd19	:	character_x = 	16'b0000000000000110;
+                    5'd20	:	character_x = 	16'b0000000000000110;
+                    5'd21	:	character_x = 	16'b0000000000000110;
+                    5'd22	:	character_x = 	16'b0000000000000110;
+                    5'd23	:	character_x = 	16'b0000000000000110;
+                    5'd24	:	character_x = 	16'b0000000000000110;
+                    5'd25	:	character_x = 	16'b0000000000000110;
+                    5'd26	:	character_x = 	16'b0110000000000110;
+                    5'd27	:	character_x = 	16'b0110000000000110;
+                    5'd28	:	character_x = 	16'b0111000000001110;
+                    5'd29	:	character_x = 	16'b0011111111111100;
+                    5'd30	:	character_x = 	16'b0001111111111000;
+                    5'd31	:	character_x = 	16'b0000000000000000;
                     default:     character_x =  16'b0000000000000000;
                 endcase
-            8'd2    :
+            4'd4    :
                 case (pixel_y)
-
-            8'd3    :
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'd5    :
                 case (pixel_y)
-                    5'd0	:	character_x = 	16'b0000000000000000
-                    5'd1	:	character_x = 	16'b0111111111111110
-                    5'd2	:	character_x = 	16'b0111111111111110
-                    5'd3	:	character_x = 	16'b0000000000000110
-                    5'd4	:	character_x = 	16'b0000000000000110
-                    5'd5	:	character_x = 	16'b0000000000000110
-                    5'd6	:	character_x = 	16'b0000000000001100
-                    5'd7	:	character_x = 	16'b0000000000011100
-                    5'd8	:	character_x = 	16'b0000000000111000
-                    5'd9	:	character_x = 	16'b0000000000110000
-                    5'd10	:	character_x = 	16'b0000000000110000
-                    5'd11	:	character_x = 	16'b0000000001100000
-                    5'd12	:	character_x = 	16'b0000000001100000
-                    5'd13	:	character_x = 	16'b0000000011000000
-                    5'd14	:	character_x = 	16'b0000000111000000
-                    5'd15	:	character_x = 	16'b0000000111111100
-                    5'd16	:	character_x = 	16'b0000000111111110
-                    5'd17	:	character_x = 	16'b0000000000000110
-                    5'd18	:	character_x = 	16'b0000000000000110
-                    5'd19	:	character_x = 	16'b0000000000000110
-                    5'd20	:	character_x = 	16'b0000000000000110
-                    5'd21	:	character_x = 	16'b0000000000000110
-                    5'd22	:	character_x = 	16'b0000000000000110
-                    5'd23	:	character_x = 	16'b0000000000000110
-                    5'd24	:	character_x = 	16'b0000000000000110
-                    5'd25	:	character_x = 	16'b0000000000000110
-                    5'd26	:	character_x = 	16'b0110000000000110
-                    5'd27	:	character_x = 	16'b0110000000000110
-                    5'd28	:	character_x = 	16'b0111000000001110
-                    5'd29	:	character_x = 	16'b0011111111111100
-                    5'd30	:	character_x = 	16'b0001111111111000
-                    5'd31	:	character_x = 	16'b0000000000000000
-                    default:     character_x =  16'b0000000000000000;
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'd6    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'd7    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'd8    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'd9    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'ha    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'hb    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'hc    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'hd    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'he    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
+                endcase
+            4'hf    :
+                case (pixel_y)
+                    default:    character_x =   16'b0000000000000000;
                 endcase
         endcase
 
