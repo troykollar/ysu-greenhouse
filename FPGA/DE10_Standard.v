@@ -67,6 +67,7 @@ module DE10_Standard(
 display_controller display(
 	.CLOCK_50(CLOCK_50),
 	.MODULE1_STATUS(~KEY),	//Set to keybuttons for testing
+	.TEMP_F(SW),
 	.VGA_BLANK_N(VGA_BLANK_N),
 	.VGA_CLK(VGA_CLK),
 	.VGA_R(VGA_R),
