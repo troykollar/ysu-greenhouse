@@ -1,7 +1,8 @@
 #Ignore FPGA folder
 FPGA/*
-#Don't ignore verilog files
+#Don't ignore verilog or VHDL files
 !FPGA/*.v
+!FPGA/*.vhd
 
 #Don't ignore important project files
 !FPGA/*.qpf
