@@ -10,10 +10,9 @@ module temp_display #(
     input wire [9:0] y,
     output wire on_temp_display
 );
-
-    parameter digit_0_x1 = digit_1_x1 + 16;
-    parameter digit_1_x1 = digit_2_x1 + 16;
     parameter digit_2_x1 = x1;
+    parameter digit_1_x1 = digit_2_x1 + 16;
+    parameter digit_0_x1 = digit_1_x1 + 16;
 
     wire on_hundreds, on_tens, on_ones;
     assign on_temp_display = (on_hundreds || on_tens || on_ones);
