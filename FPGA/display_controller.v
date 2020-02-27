@@ -93,28 +93,52 @@ module display_controller(
 //  Temperature display info
 //=======================================================
 
-    parameter temp_displays_height = 50;
+    parameter TEMP_DISPLAY_HEIGHT = 50;
     // Display of actual temperature
-    wire on_actual_temp_display;
-    temp_display #(.x1(50), .y1(temp_displays_height)) actual_temp(
-        .temp_value_100({2'b00, TEMP_F[9:8]}),
-        .temp_value_10(TEMP_F[7:4]),
-        .temp_value_1(TEMP_F[3:0]),
-        .x(x),
-        .y(y),
-        .on_temp_display(on_actual_temp_display)
-    );
+        parameter ACTUAL_TEMP_X = 50;
+        // ACTUAL text above temperature reading
+        wire on_actual_temp_text;
+        Pixel_On_Text2 #(.displayText("ACTUAL")) actual_temp_text(
+            .clk(VGA_CLK),
+            .positionX(ACTUAL_TEMP_X - 2),
+            .positionY(TEMP_DISPLAY_HEIGHT - 16),
+            .horzCoord(x),
+            .vertCoord(y),
+            .pixel(on_actual_temp_text)
+        );
+        // Numeric Digits of ACTUAL TEMP reading
+        wire on_actual_temp_display;
+        temp_display #(.x1(ACTUAL_TEMP_X), .y1(TEMP_DISPLAY_HEIGHT)) actual_temp(
+            .temp_value_100({2'b00, TEMP_F[9:8]}),
+            .temp_value_10(TEMP_F[7:4]),
+            .temp_value_1(TEMP_F[3:0]),
+            .x(x),
+            .y(y),
+            .on_temp_display(on_actual_temp_display)
+        );
 
     // Display of set temperature
-    wire on_set_temp_display;
-    temp_display #(.x1(150), .y1(temp_displays_height)) set_temp(
-        .temp_value_100({2'b00, TEMP_F[9:8]}),
-        .temp_value_10(TEMP_F[7:4]),
-        .temp_value_1(TEMP_F[3:0]),
-        .x(x),
-        .y(y),
-        .on_temp_display(on_set_temp_display)
-    );
+        parameter SET_TEMP_X = 150;
+        // SET text above set temperature display
+        wire on_set_temp_text;
+        Pixel_On_Text2 #(.displayText("SET")) set_temp_text(
+            .clk(VGA_CLK),
+            .positionX(SET_TEMP_X + 10),
+            .positionY(TEMP_DISPLAY_HEIGHT - 16),
+            .horzCoord(x),
+            .vertCoord(y),
+            .pixel(on_set_temp_text)
+        );
+        // Numeric Digits of SET TEMP display
+        wire on_set_temp_display;
+        temp_display #(.x1(SET_TEMP_X), .y1(TEMP_DISPLAY_HEIGHT)) set_temp(
+            .temp_value_100({2'b00, TEMP_F[9:8]}),
+            .temp_value_10(TEMP_F[7:4]),
+            .temp_value_1(TEMP_F[3:0]),
+            .x(x),
+            .y(y),
+            .on_temp_display(on_set_temp_display)
+        );
 
     // Test display using smaller text rom
     wire on_test_text;
@@ -134,7 +158,9 @@ module display_controller(
     always @(posedge CLOCK_50)
         if (dividers) RGB <= 3'b000;    // Draw dividing lines
         else if (on_actual_temp_display)    RGB <= 3'b000;
+        else if (on_actual_temp_text)       RGB <= 3'b000; 
         else if (on_set_temp_display)       RGB <= 3'b000;
+        else if (on_set_temp_text)       RGB <= 3'b000;
         else if (on_test_text)              RGB <= 3'b000;
         else          RGB <= 3'b111;    // White where things are not drawn
 
