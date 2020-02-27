@@ -1,6 +1,7 @@
 module display_controller(
     input                       CLOCK_50,
     input           [3:0]       MODULE1_STATUS,
+    input           [9:0]      TEMP_F,
     output		          		VGA_BLANK_N,
 	output		          		VGA_CLK,
 	output reg		[7:0]		VGA_R,
@@ -60,6 +61,10 @@ module display_controller(
         VGA_B = {8{B}};
     end
 
+//=======================================================
+//  Display dividers
+//=======================================================
+
     // Divider at y = 120
     rectangle_display #(.x1(0), .x2(640), .y1(115), .y2(125)) div0(
         .clk(CLOCK_50),
@@ -84,20 +89,41 @@ module display_controller(
         .on_rectangle(div_2)
     );
 
-    wire on_zero;
+//=======================================================
+//  Temperature display info
+//=======================================================
 
-    font16x32 #(.x1(50), .y1(50)) testnum(
-        .character_code(8'd0),
-        .char_start_x(10'd50),
-        .char_start_y(10'd50),
+    parameter temp_displays_height = 50;
+    // Display of actual temperature
+    wire on_actual_temp_display;
+    temp_display #(.x1(50), .y1(temp_displays_height)) actual_temp(
+        .temp_value_100({2'b00, TEMP_F[9:8]}),
+        .temp_value_10(TEMP_F[7:4]),
+        .temp_value_1(TEMP_F[3:0]),
         .x(x),
         .y(y),
-        .on_char(on_zero)
+        .on_temp_display(on_actual_temp_display)
     );
+
+    // Display of set temperature
+    wire on_set_temp_display;
+    temp_display #(.x1(150), .y1(temp_displays_height)) set_temp(
+        .temp_value_100({2'b00, TEMP_F[9:8]}),
+        .temp_value_10(TEMP_F[7:4]),
+        .temp_value_1(TEMP_F[3:0]),
+        .x(x),
+        .y(y),
+        .on_temp_display(on_set_temp_display)
+    );
+
+//=======================================================
+//  Set RGB regsiter according to whether or not pixel needs drawn
+//=======================================================
 
     always @(posedge CLOCK_50)
         if (dividers) RGB <= 3'b000;    // Draw dividing lines
-        else if (on_zero) RGB <= 3'b001;    //Draw zero digit
+        else if (on_actual_temp_display)    RGB <= 3'b000;
+        else if (on_set_temp_display)       RGB <= 3'b000;
         else          RGB <= 3'b111;    // White where things are not drawn
 
 endmodule // display_controller
