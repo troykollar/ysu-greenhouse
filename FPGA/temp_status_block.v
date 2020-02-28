@@ -8,7 +8,8 @@ module temp_status_block #(
     input wire [9:0] x,
     input wire [9:0] y,
     output wire on_temp_status_black,
-    output wire on_temp_status_green
+    output wire on_temp_status_green,
+    output wire on_temp_status_red
 );
 
 //=======================================================
@@ -129,12 +130,66 @@ module temp_status_block #(
         .on_rectangle(on_heating_active_block)
     );
 
-    reg [1:0] active_block;
+    parameter active_cooling_block_y1 =  active_heating_block_y1 + 38;
+    parameter active_cooling_block_y2 =  active_heating_block_y2 + 38;
+    wire on_cooling_active_block;
+    rectangle_display #(.x1(active_block_x1), .x2(active_block_x2), .y1(active_cooling_block_y1), .y2(active_cooling_block_y2)) active_cooling_block(
+        .x(x),
+        .y(y),
+        .on_rectangle(on_cooling_active_block)
+    );
+
+    parameter active_idle_block_y1 =  active_cooling_block_y1 + 38;
+    parameter active_idle_block_y2 =  active_cooling_block_y2 + 38;
+    wire on_idle_active_block;
+    rectangle_display #(.x1(active_block_x1), .x2(active_block_x2), .y1(active_idle_block_y1), .y2(active_idle_block_y2)) active_idle_block(
+        .x(x),
+        .y(y),
+        .on_rectangle(on_idle_active_block)
+    );
+
+    reg active_block;
     always @(*)
         if ((status == 2'b01) && (on_heating_active_block))
+            active_block <= 1;
+        else if ((status == 2'b10) && (on_cooling_active_block))
+            active_block <= 1;
+        else if ((status == 2'b00) && (on_idle_active_block))
             active_block <= 1;
         else active_block <= 0;
 
     assign on_temp_status_green = active_block;
+
+//=======================================================
+//  Error display logic
+//=======================================================
+    reg flash_on;
+    reg [27:0] counter;
+    always @(posedge clk)
+        if (counter == 28'd10_000_000)
+            counter <= 0;
+        else counter <= counter + 1;
+
+    always @(counter)
+        if (counter == 28'd10_000_000)
+            flash_on <= ~flash_on;
+        else flash_on <= flash_on;
+
+    wire on_error_block;
+    parameter active_error_block_y1 =  active_heating_block_y1;
+    parameter active_error_block_y2 =  active_idle_block_y2;
+    rectangle_display #(.x1(active_block_x1), .x2(active_block_x2), .y1(active_error_block_y1), .y2(active_error_block_y2)) active_error_block(
+        .x(x),
+        .y(y),
+        .on_rectangle(on_error_block)
+    );
+
+    reg error_block;
+    always @(*)
+        if ((status == 2'b11) && (on_error_block) && (flash_on))
+            error_block <= 1;
+        else error_block <= 0;
+
+    assign on_temp_status_red = error_block;
 
 endmodule
