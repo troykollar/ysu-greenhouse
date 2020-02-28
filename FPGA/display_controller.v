@@ -67,7 +67,6 @@ module display_controller(
 
     // Divider at y = 120
     rectangle_display #(.x1(0), .x2(640), .y1(115), .y2(125)) div0(
-        .clk(CLOCK_50),
         .x(x),
         .y(y),
         .on_rectangle(div_0)
@@ -75,7 +74,6 @@ module display_controller(
 
     // Divider at y = 240
     rectangle_display #(.x1(0), .x2(640), .y1(235), .y2(245)) div1(
-        .clk(CLOCK_50),
         .x(x),
         .y(y),
         .on_rectangle(div_1)
@@ -83,7 +81,6 @@ module display_controller(
 
     // Divider at y = 360
     rectangle_display #(.x1(0), .x2(640), .y1(355), .y2(365)) div2(
-        .clk(CLOCK_50),
         .x(x),
         .y(y),
         .on_rectangle(div_2)
@@ -142,7 +139,7 @@ module display_controller(
 
     // Test display using smaller text rom
     wire on_test_text;
-    Pixel_On_Text2 #(.displayText("Test text for smaller font")) test_text(
+    Pixel_On_Text2 #(.displayText("test text")) test_text(
         .clk(VGA_CLK),
         .positionX(250),
         .positionY(250),
@@ -152,16 +149,32 @@ module display_controller(
     );
 
 //=======================================================
+//  Temperature status indicators
+//=======================================================
+
+    wire on_temp_status_black;
+    wire on_temp_status_green;
+    temp_status_block #(.x1(275), .y1(0)) temp_status(
+        .clk(VGA_CLK),
+        .status(TEMP_F[1:0]),
+        .x(x),
+        .y(y),
+        .on_temp_status_black(on_temp_status_black),
+        .on_temp_status_green(on_temp_status_green)
+    );
+
+//=======================================================
 //  Set RGB regsiter according to whether or not pixel needs drawn
 //=======================================================
 
+    wire on_black;
+    wire on_green;
+    assign on_black = dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_test_text || on_temp_status_black;
+    assign on_green = on_temp_status_green;
+
     always @(posedge CLOCK_50)
-        if (dividers) RGB <= 3'b000;    // Draw dividing lines
-        else if (on_actual_temp_display)    RGB <= 3'b000;
-        else if (on_actual_temp_text)       RGB <= 3'b000; 
-        else if (on_set_temp_display)       RGB <= 3'b000;
-        else if (on_set_temp_text)       RGB <= 3'b000;
-        else if (on_test_text)              RGB <= 3'b000;
+        if (on_black) RGB <= 3'b000;
+        else if (on_black) RGB <= 3'b010;
         else          RGB <= 3'b111;    // White where things are not drawn
 
 endmodule // display_controller

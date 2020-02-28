@@ -341,6 +341,7 @@ set_global_assignment -name VERILOG_FILE val_to_seven_seg.v
 set_global_assignment -name QSYS_FILE adc_controller/adc_controller.qsys
 set_global_assignment -name VERILOG_FILE vga_controller_640x480.v
 set_global_assignment -name VERILOG_FILE display_controller.v
+set_global_assignment -name VERILOG_FILE temp_status_block.v
 set_global_assignment -name VERILOG_FILE temp_display.v
 set_global_assignment -name VHDL_FILE Pixel_On_Text2.vhd
 set_global_assignment -name VHDL_FILE Font_Rom.vhd
