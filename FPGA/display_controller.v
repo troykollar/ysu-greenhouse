@@ -155,7 +155,7 @@ module display_controller(
     wire on_temp_status_black;
     wire on_temp_status_green;
     wire on_temp_status_red;
-    temp_status_block #(.x1(275), .y1(1)) temp_status(
+    temp_status_block #(.x1(275), .y1(0)) temp_status(
         .clk(VGA_CLK),
         .status(TEMP_F[1:0]),
         .x(x),
@@ -164,6 +164,55 @@ module display_controller(
         .on_temp_status_green(on_temp_status_green),
         .on_temp_status_red(on_temp_status_red)
     );
+
+//=======================================================
+//  Humidity display info
+//=======================================================
+
+    parameter HUM_DISPLAY_HEIGHT = 170;
+    // Display of actual humidity
+        parameter ACTUAL_HUM_X = 50;
+        // ACTUAL text above humidity reading
+        wire on_actual_hum_text;
+        Pixel_On_Text2 #(.displayText("ACTUAL")) actual_hum_text(
+            .clk(VGA_CLK),
+            .positionX(ACTUAL_HUM_X - 2),
+            .positionY(HUM_DISPLAY_HEIGHT - 16),
+            .horzCoord(x),
+            .vertCoord(y),
+            .pixel(on_actual_hum_text)
+        );
+        // Numeric Digits of ACTUAL HUM reading
+        wire on_actual_hum_display;
+        hum_display #(.x1(ACTUAL_HUM_X), .y1(HUM_DISPLAY_HEIGHT)) actual_hum(
+            .hum_value_10(TEMP_F[7:4]),
+            .hum_value_1(TEMP_F[3:0]),
+            .x(x),
+            .y(y),
+            .on_hum_display(on_actual_hum_display)
+        );
+
+    // Display of set humidity
+        parameter SET_HUM_X = 150;
+        // SET text above humidity reading
+        wire on_set_hum_text;
+        Pixel_On_Text2 #(.displayText("SET")) set_hum_text(
+            .clk(VGA_CLK),
+            .positionX(SET_HUM_X + 10),
+            .positionY(HUM_DISPLAY_HEIGHT - 16),
+            .horzCoord(x),
+            .vertCoord(y),
+            .pixel(on_set_hum_text)
+        );
+        // Numeric Digits of ACTUAL HUM reading
+        wire on_set_hum_display;
+        hum_display #(.x1(SET_HUM_X), .y1(HUM_DISPLAY_HEIGHT)) set_hum(
+            .hum_value_10(TEMP_F[7:4]),
+            .hum_value_1(TEMP_F[3:0]),
+            .x(x),
+            .y(y),
+            .on_hum_display(on_set_hum_display)
+        );
 
 //=======================================================
 //  Humidity status indicators
@@ -189,7 +238,7 @@ module display_controller(
     wire on_black;
     wire on_red;
     wire on_green;
-    assign on_black = on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_test_text || on_temp_status_black;
+    assign on_black = on_set_hum_text || on_set_hum_display || on_actual_hum_text || on_actual_hum_display || on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_test_text || on_temp_status_black;
     assign on_red = on_hum_status_red || on_temp_status_red;
     assign on_green = on_hum_status_green || on_temp_status_green;
 
