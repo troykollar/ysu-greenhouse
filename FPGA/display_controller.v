@@ -252,13 +252,25 @@ module display_controller(
     );
 
 //=======================================================
+//  Switch indicators
+//=======================================================
+
+    wire on_switch_indicators;
+    switch_indicator_group #(.x1(10), .y1(450)) switches(
+        .status(TEMP_F),
+        .x(x),
+        .y(y),
+        .on_switch_indicator_group(on_switch_indicators)
+    );
+
+//=======================================================
 //  Set RGB regsiter according to whether or not pixel needs drawn
 //=======================================================
 
     wire on_black;
     wire on_red;
     wire on_green;
-    assign on_black = on_humidity_text || on_temperature_text || on_set_hum_text || on_set_hum_display || on_actual_hum_text || on_actual_hum_display || on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_test_text || on_temp_status_black;
+    assign on_black = on_switch_indicators || on_humidity_text || on_temperature_text || on_set_hum_text || on_set_hum_display || on_actual_hum_text || on_actual_hum_display || on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_test_text || on_temp_status_black;
     assign on_red = on_hum_status_red || on_temp_status_red;
     assign on_green = on_hum_status_green || on_temp_status_green;
 
