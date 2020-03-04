@@ -140,7 +140,7 @@ module temp_status_block #(
     );
 
     parameter active_idle_block_y1 =  active_cooling_block_y1 + 38;
-    parameter active_idle_block_y2 =  active_cooling_block_y2 + 38;
+    parameter active_idle_block_y2 =  active_cooling_block_y2 + 39;
     wire on_idle_active_block;
     rectangle_display #(.x1(active_block_x1), .x2(active_block_x2), .y1(active_idle_block_y1), .y2(active_idle_block_y2)) active_idle_block(
         .x(x),
