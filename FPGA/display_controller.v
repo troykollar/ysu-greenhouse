@@ -155,7 +155,7 @@ module display_controller(
     wire on_temp_status_black;
     wire on_temp_status_green;
     wire on_temp_status_red;
-    temp_status_block #(.x1(275), .y1(0)) temp_status(
+    temp_status_block #(.x1(275), .y1(1)) temp_status(
         .clk(VGA_CLK),
         .status(TEMP_F[1:0]),
         .x(x),
@@ -166,15 +166,32 @@ module display_controller(
     );
 
 //=======================================================
+//  Humidity status indicators
+//=======================================================
+
+    wire on_hum_status_black;
+    wire on_hum_status_green;
+    wire on_hum_status_red;
+    hum_status_block #(.x1(275), .y1(125)) hum_status(
+        .clk(VGA_CLK),
+        .status(TEMP_F[1:0]),
+        .x(x),
+        .y(y),
+        .on_hum_status_black(on_hum_status_black),
+        .on_hum_status_green(on_hum_status_green),
+        .on_hum_status_red(on_hum_status_red)
+    );
+
+//=======================================================
 //  Set RGB regsiter according to whether or not pixel needs drawn
 //=======================================================
 
     wire on_black;
     wire on_red;
     wire on_green;
-    assign on_black = dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_test_text || on_temp_status_black;
-    assign on_red = on_temp_status_red;
-    assign on_green = on_temp_status_green;
+    assign on_black = on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_test_text || on_temp_status_black;
+    assign on_red = on_hum_status_red || on_temp_status_red;
+    assign on_green = on_hum_status_green || on_temp_status_green;
 
     always @(posedge CLOCK_50)
         if (on_black) RGB <= 3'b000;
