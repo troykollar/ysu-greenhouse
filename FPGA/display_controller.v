@@ -90,6 +90,16 @@ module display_controller(
 //  Temperature display info
 //=======================================================
 
+    wire on_temperature_text;
+    Pixel_On_Text2 #(.displayText("TEMPERATURE")) temperature_text(
+            .clk(VGA_CLK),
+            .positionX(5),
+            .positionY(2),
+            .horzCoord(x),
+            .vertCoord(y),
+            .pixel(on_temperature_text)
+        );
+
     parameter TEMP_DISPLAY_HEIGHT = 50;
     // Display of actual temperature
         parameter ACTUAL_TEMP_X = 50;
@@ -169,6 +179,16 @@ module display_controller(
 //  Humidity display info
 //=======================================================
 
+    wire on_humidity_text;
+    Pixel_On_Text2 #(.displayText("HUMIDITY")) humidity_text(
+            .clk(VGA_CLK),
+            .positionX(5),
+            .positionY(127),
+            .horzCoord(x),
+            .vertCoord(y),
+            .pixel(on_humidity_text)
+        );
+
     parameter HUM_DISPLAY_HEIGHT = 170;
     // Display of actual humidity
         parameter ACTUAL_HUM_X = 50;
@@ -238,7 +258,7 @@ module display_controller(
     wire on_black;
     wire on_red;
     wire on_green;
-    assign on_black = on_set_hum_text || on_set_hum_display || on_actual_hum_text || on_actual_hum_display || on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_test_text || on_temp_status_black;
+    assign on_black = on_humidity_text || on_temperature_text || on_set_hum_text || on_set_hum_display || on_actual_hum_text || on_actual_hum_display || on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_test_text || on_temp_status_black;
     assign on_red = on_hum_status_red || on_temp_status_red;
     assign on_green = on_hum_status_green || on_temp_status_green;
 
