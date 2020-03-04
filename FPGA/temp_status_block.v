@@ -16,7 +16,7 @@ module temp_status_block #(
 //  Dividing line logic
 //=======================================================
 
-    parameter width = 115;
+    parameter width = 140;
 
     wire on_topline;
 
@@ -163,17 +163,12 @@ module temp_status_block #(
 //=======================================================
 //  Error display logic
 //=======================================================
-    reg flash_on;
-    reg [27:0] counter;
-    always @(posedge clk)
-        if (counter == 28'd10_000_000)
-            counter <= 0;
-        else counter <= counter + 1;
+    wire flash_on;
 
-    always @(counter)
-        if (counter == 28'd10_000_000)
-            flash_on <= ~flash_on;
-        else flash_on <= flash_on;
+    flash_onoff flahser(
+        .clk(clk),
+        .flash(flash_on)
+    );
 
     wire on_error_block;
     parameter active_error_block_y1 =  active_heating_block_y1;
@@ -184,12 +179,6 @@ module temp_status_block #(
         .on_rectangle(on_error_block)
     );
 
-    reg error_block;
-    always @(*)
-        if ((status == 2'b11) && (on_error_block) && (flash_on))
-            error_block <= 1;
-        else error_block <= 0;
-
-    assign on_temp_status_red = error_block;
+    assign on_temp_status_red = ((status == 2'b11) && (on_error_block) && (flash_on));
 
 endmodule
