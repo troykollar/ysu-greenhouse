@@ -1,7 +1,12 @@
 module display_controller(
     input                       CLOCK_50,
-    input           [3:0]       MODULE1_STATUS,
-    input           [9:0]      TEMP_F,
+    input           [11:0]      TEMP_F,
+    input           [11:0]      SET_TEMP_F,
+    input           [1:0]       TEMP_STATUS,
+    input           [7:0]       HUM,
+    input           [7:0]       SET_HUM,
+    input           [1:0]       HUM_STATUS,
+    input           [9:0]       SW,
     output		          		VGA_BLANK_N,
 	output		          		VGA_CLK,
 	output reg		[7:0]		VGA_R,
@@ -116,7 +121,7 @@ module display_controller(
         // Numeric Digits of ACTUAL TEMP reading
         wire on_actual_temp_display;
         temp_display #(.x1(ACTUAL_TEMP_X), .y1(TEMP_DISPLAY_HEIGHT)) actual_temp(
-            .temp_value_100({2'b00, TEMP_F[9:8]}),
+            .temp_value_100(TEMP_F[11:8]),
             .temp_value_10(TEMP_F[7:4]),
             .temp_value_1(TEMP_F[3:0]),
             .x(x),
@@ -139,24 +144,13 @@ module display_controller(
         // Numeric Digits of SET TEMP display
         wire on_set_temp_display;
         temp_display #(.x1(SET_TEMP_X), .y1(TEMP_DISPLAY_HEIGHT)) set_temp(
-            .temp_value_100({2'b00, TEMP_F[9:8]}),
-            .temp_value_10(TEMP_F[7:4]),
-            .temp_value_1(TEMP_F[3:0]),
+            .temp_value_100(SET_TEMP_F[11:8]),
+            .temp_value_10(SET_TEMP_F[7:4]),
+            .temp_value_1(SET_TEMP_F[3:0]),
             .x(x),
             .y(y),
             .on_temp_display(on_set_temp_display)
         );
-
-    // Test display using smaller text rom
-    wire on_test_text;
-    Pixel_On_Text2 #(.displayText("test text")) test_text(
-        .clk(VGA_CLK),
-        .positionX(250),
-        .positionY(250),
-        .horzCoord(x),
-        .vertCoord(y),
-        .pixel(on_test_text)
-    );
 
 //=======================================================
 //  Temperature status indicators
@@ -167,7 +161,7 @@ module display_controller(
     wire on_temp_status_red;
     temp_status_block #(.x1(275), .y1(0)) temp_status(
         .clk(VGA_CLK),
-        .status(TEMP_F[1:0]),
+        .status(TEMP_STATUS),
         .x(x),
         .y(y),
         .on_temp_status_black(on_temp_status_black),
@@ -205,8 +199,8 @@ module display_controller(
         // Numeric Digits of ACTUAL HUM reading
         wire on_actual_hum_display;
         hum_display #(.x1(ACTUAL_HUM_X), .y1(HUM_DISPLAY_HEIGHT)) actual_hum(
-            .hum_value_10(TEMP_F[7:4]),
-            .hum_value_1(TEMP_F[3:0]),
+            .hum_value_10(HUM[7:4]),
+            .hum_value_1(HUM[3:0]),
             .x(x),
             .y(y),
             .on_hum_display(on_actual_hum_display)
@@ -224,11 +218,11 @@ module display_controller(
             .vertCoord(y),
             .pixel(on_set_hum_text)
         );
-        // Numeric Digits of ACTUAL HUM reading
+        // Numeric Digits of SET HUM
         wire on_set_hum_display;
         hum_display #(.x1(SET_HUM_X), .y1(HUM_DISPLAY_HEIGHT)) set_hum(
-            .hum_value_10(TEMP_F[7:4]),
-            .hum_value_1(TEMP_F[3:0]),
+            .hum_value_10(SET_HUM[7:4]),
+            .hum_value_1(SET_HUM[3:0]),
             .x(x),
             .y(y),
             .on_hum_display(on_set_hum_display)
@@ -243,7 +237,7 @@ module display_controller(
     wire on_hum_status_red;
     hum_status_block #(.x1(275), .y1(125)) hum_status(
         .clk(VGA_CLK),
-        .status(TEMP_F[1:0]),
+        .status(HUM_STATUS),
         .x(x),
         .y(y),
         .on_hum_status_black(on_hum_status_black),
@@ -257,7 +251,7 @@ module display_controller(
 
     wire on_switch_indicators;
     switch_indicator_group #(.x1(10), .y1(450)) switches(
-        .status(TEMP_F),
+        .status(SW),
         .x(x),
         .y(y),
         .on_switch_indicator_group(on_switch_indicators)
@@ -270,7 +264,7 @@ module display_controller(
     wire on_black;
     wire on_red;
     wire on_green;
-    assign on_black = on_switch_indicators || on_humidity_text || on_temperature_text || on_set_hum_text || on_set_hum_display || on_actual_hum_text || on_actual_hum_display || on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_test_text || on_temp_status_black;
+    assign on_black = on_switch_indicators || on_humidity_text || on_temperature_text || on_set_hum_text || on_set_hum_display || on_actual_hum_text || on_actual_hum_display || on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_temp_status_black;
     assign on_red = on_hum_status_red || on_temp_status_red;
     assign on_green = on_hum_status_green || on_temp_status_green;
 
