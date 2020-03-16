@@ -6,7 +6,10 @@ module display_controller(
     input           [7:0]       HUM,
     input           [7:0]       SET_HUM,
     input           [1:0]       HUM_STATUS,
+    input           [4:0]       TIME_HOURS,
+    input           [5:0]       TIME_MINUTES,
     input           [9:0]       SW,
+    input           [3:0]       MENU_STATE,
     output		          		VGA_BLANK_N,
 	output		          		VGA_CLK,
 	output reg		[7:0]		VGA_R,
@@ -143,10 +146,12 @@ module display_controller(
         );
         // Numeric Digits of SET TEMP display
         wire on_set_temp_display;
+        wire [11:0] SET_TEMP_BCD;
+        bin2bcd set_tempbcd(SET_TEMP_F, SET_TEMP_BCD);
         temp_display #(.x1(SET_TEMP_X), .y1(TEMP_DISPLAY_HEIGHT)) set_temp(
-            .temp_value_100(SET_TEMP_F[11:8]),
-            .temp_value_10(SET_TEMP_F[7:4]),
-            .temp_value_1(SET_TEMP_F[3:0]),
+            .temp_value_100(SET_TEMP_BCD[11:8]),
+            .temp_value_10(SET_TEMP_BCD[7:4]),
+            .temp_value_1(SET_TEMP_BCD[3:0]),
             .x(x),
             .y(y),
             .on_temp_display(on_set_temp_display)
@@ -220,9 +225,11 @@ module display_controller(
         );
         // Numeric Digits of SET HUM
         wire on_set_hum_display;
+        wire [7:0] SET_HUM_BCD;
+        bin2bcd(SET_HUM, SET_HUM_BCD);
         hum_display #(.x1(SET_HUM_X), .y1(HUM_DISPLAY_HEIGHT)) set_hum(
-            .hum_value_10(SET_HUM[7:4]),
-            .hum_value_1(SET_HUM[3:0]),
+            .hum_value_10(SET_HUM_BCD[7:4]),
+            .hum_value_1(SET_HUM_BCD[3:0]),
             .x(x),
             .y(y),
             .on_hum_display(on_set_hum_display)
@@ -246,6 +253,25 @@ module display_controller(
     );
 
 //=======================================================
+//  Menu
+//=======================================================
+
+    wire on_menu;
+    wire on_menu_bar;
+    menu_display #(.x1(300), .y1(425)) (
+        .clk(VGA_CLK),
+        .set_temp(SET_TEMP_F),
+        .set_hum(SET_HUM),
+        .time_hours(TIME_HOURS),
+        .time_minutes(TIME_MINUTES),
+        .state(MENU_STATE),
+        .x(x),
+        .y(y),
+        .on_menu_display(on_menu),
+        .on_menu_bar(on_menu_bar)
+    );
+
+//=======================================================
 //  Switch indicators
 //=======================================================
 
@@ -264,9 +290,9 @@ module display_controller(
     wire on_black;
     wire on_red;
     wire on_green;
-    assign on_black = on_switch_indicators || on_humidity_text || on_temperature_text || on_set_hum_text || on_set_hum_display || on_actual_hum_text || on_actual_hum_display || on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_temp_status_black;
+    assign on_black = on_menu || on_switch_indicators || on_humidity_text || on_temperature_text || on_set_hum_text || on_set_hum_display || on_actual_hum_text || on_actual_hum_display || on_hum_status_black || dividers || on_actual_temp_display || on_actual_temp_text ||on_set_temp_display || on_set_temp_text || on_temp_status_black;
     assign on_red = on_hum_status_red || on_temp_status_red;
-    assign on_green = on_hum_status_green || on_temp_status_green;
+    assign on_green = on_menu_bar || on_hum_status_green || on_temp_status_green;
 
     always @(posedge CLOCK_50)
         if (on_black) RGB <= 3'b000;
