@@ -58,12 +58,19 @@ module DE10_Standard(
 	wire [11:0] adc_values [7:0];
 	wire [10:0] temp_c;
 	wire [11:0] temp_f;
-	reg [11:0] SET_TEMP_F = 12'd72;
+	wire [1:0] temp_control_status;
+	reg [7:0] SET_TEMP_F = 8'd72;
 	reg [7:0] SET_HUM = 8'd50;
 	wire [1:0] temp_adjust;
 	wire [1:0] hum_adjust;
 	wire [2:0] time_adjust;
 	wire [3:0] menu_state;
+	wire [5:0] seconds;
+	wire [5:0] minutes;
+	wire [4:0] hours;
+	wire [2:0] sunrise_time_adjust;
+	reg [4:0] sunrise_hours;
+	reg [5:0] sunrise_minutes;
 	assign LEDR[3:0] = menu_state;
 
 //=======================================================
@@ -79,7 +86,8 @@ module DE10_Standard(
 		.state(menu_state),
 		.temp_adjust(temp_adjust),
 		.hum_adjust(hum_adjust),
-		.time_adjust(time_adjust)
+		.time_adjust(time_adjust),
+		.sunrise_time_adjust(sunrise_time_adjust)
 	);
 
 	always @(posedge CLOCK_50)
@@ -98,11 +106,18 @@ module DE10_Standard(
 		else
 			SET_HUM <= SET_HUM;
 
+	//TODO: Change temp_f_signed to actual ADC reading
+	temp_control temperature_controller(
+		.temp_f_signed({1'b0, SET_HUM}),
+		.temp_f_setpoint(SET_TEMP_F),
+		.status(temp_control_status)
+	);
+
 display_controller display(
 	.CLOCK_50(CLOCK_50),
-	.TEMP_F({2'b00, SW}),
+	.TEMP_F(SET_HUM),
 	.SET_TEMP_F(SET_TEMP_F),
-	.TEMP_STATUS(SW[1:0]),
+	.TEMP_STATUS(temp_control_status),
 	.HUM(SW[7:0]),
 	.SET_HUM(SET_HUM),
 	.HUM_STATUS(SW[1:0]),
@@ -143,9 +158,6 @@ voltage_to_temp v_to_temp (
 	.temp_f_signed(temp_f)
 );
 
-wire [5:0] seconds;
-wire [5:0] minutes;
-wire [4:0] hours;
 timekeeper time_keeper(
 	.clk(CLOCK_50),
 	.time_adjust(time_adjust),
