@@ -8,6 +8,8 @@ module display_controller(
     input           [1:0]       HUM_STATUS,
     input           [4:0]       TIME_HOURS,
     input           [5:0]       TIME_MINUTES,
+    input           [4:0]       SUNRISE_HOURS,
+    input           [5:0]       SUNRISE_MINUTES,
     input           [9:0]       SW,
     input           [3:0]       MENU_STATE,
     output		          		VGA_BLANK_N,
@@ -258,12 +260,14 @@ module display_controller(
 
     wire on_menu;
     wire on_menu_bar;
-    menu_display #(.x1(300), .y1(425)) (
+    menu_display #(.x1(325), .y1(415)) (
         .clk(VGA_CLK),
         .set_temp(SET_TEMP_F),
         .set_hum(SET_HUM),
         .time_hours(TIME_HOURS),
         .time_minutes(TIME_MINUTES),
+        .sunrise_hours(SUNRISE_HOURS),
+        .sunrise_minutes(SUNRISE_MINUTES),
         .state(MENU_STATE),
         .x(x),
         .y(y),

@@ -7,10 +7,11 @@ module menu(
     output reg [3:0] state = 0,
     output reg [1:0] temp_adjust,
     output reg [1:0] hum_adjust,
-    output reg [2:0] time_adjust
+    output reg [2:0] time_adjust,
+    output reg [2:0] sunrise_time_adjust
 );
 
-    parameter max_state = 2;
+    parameter max_state = 5;
 
     wire up_debounced;
     debounce debounce_u(clk, up, up_debounced);
@@ -37,6 +38,14 @@ module menu(
                 else                        state <= state;
             4'd3    :
                 if (left_debounced)         state <= state - 1;
+                else if (right_debounced)   state <= state + 1;
+                else                        state <= state;
+            4'd4    :
+                if (left_debounced)         state <= state - 1;
+                else if (right_debounced)   state <= state + 1;
+                else                        state <= state;
+            4'd5    :
+                if (left_debounced)         state <= state - 1;
                 else if (right_debounced)   state <= 4'd0;
                 else                        state <= state;
             default: state <= state; 
@@ -45,6 +54,10 @@ module menu(
         // STATES:
         // 0 == Set temperature (F)
         // 1 == Set Humidity
+        // 2 == Set time hours
+        // 3 == Set time minutes
+        // 4 == Set sunrise time hours
+        // 5 == Set sunrise time minutes
 
         // adjust: 0 == no adjustment, 1 == up, 2 == down
         always @(posedge clk)
@@ -84,6 +97,23 @@ module menu(
                         time_adjust <= 3'd2;
                     else time_adjust <= 0;
                 default: time_adjust <= 0;
+            endcase
+
+        always @(posedge clk)
+            case (state)
+                4'd4:
+                     if (up_debounced)
+                        sunrise_time_adjust <= 3'd3;
+                    else if (down_debounced)
+                        sunrise_time_adjust <= 3'd4;
+                    else sunrise_time_adjust <= 0;
+                4'd5:
+                    if (up_debounced)
+                        sunrise_time_adjust <= 3'd1;
+                    else if (down_debounced)
+                        sunrise_time_adjust <= 3'd2;
+                    else sunrise_time_adjust <= 0;
+                default: sunrise_time_adjust <= 0;
             endcase
 
 endmodule
