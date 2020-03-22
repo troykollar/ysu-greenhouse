@@ -390,10 +390,74 @@ module font16x32 #(
                 endcase
             4'ha    :
                 case (pixel_y)
+                    5'd0	:	character_x = 	16'b0000000000000000;
+                    5'd1	:	character_x = 	16'b0000000000000000;
+                    5'd2	:	character_x = 	16'b0000000000000000;
+                    5'd3	:	character_x = 	16'b0000000000001000;
+                    5'd4	:	character_x = 	16'b0000110000010000;
+                    5'd5	:	character_x = 	16'b0001001000010000;
+                    5'd6	:	character_x = 	16'b0001001000010000;
+                    5'd7	:	character_x = 	16'b0000110000100000;
+                    5'd8	:	character_x = 	16'b0000000000100000;
+                    5'd9	:	character_x = 	16'b0000000000100000;
+                    5'd10	:	character_x = 	16'b0000000001000000;
+                    5'd11	:	character_x = 	16'b0000000001000000;
+                    5'd12	:	character_x = 	16'b0000000001000000;
+                    5'd13	:	character_x = 	16'b0000000010000000;
+                    5'd14	:	character_x = 	16'b0000000010000000;
+                    5'd15	:	character_x = 	16'b0000000010000000;
+                    5'd16	:	character_x = 	16'b0000000100000000;
+                    5'd17	:	character_x = 	16'b0000000100000000;
+                    5'd18	:	character_x = 	16'b0000000100000000;
+                    5'd19	:	character_x = 	16'b0000001000000000;
+                    5'd20	:	character_x = 	16'b0000001000000000;
+                    5'd21	:	character_x = 	16'b0000001000000000;
+                    5'd22	:	character_x = 	16'b0000010000000000;
+                    5'd23	:	character_x = 	16'b0000010000000000;
+                    5'd24	:	character_x = 	16'b0000010000110000;
+                    5'd25	:	character_x = 	16'b0000100001001000;
+                    5'd26	:	character_x = 	16'b0000100001001000;
+                    5'd27	:	character_x = 	16'b0000100000110000;
+                    5'd28	:	character_x = 	16'b0001000000000000;
+                    5'd29	:	character_x = 	16'b0000000000000000;
+                    5'd30	:	character_x = 	16'b0000000000000000;
+                    5'd31	:	character_x = 	16'b0000000000000000;
                     default:    character_x =   16'b0000000000000000;
                 endcase
             4'hb    :
                 case (pixel_y)
+                    5'd0	:	character_x = 	16'b0000000000000000;
+                    5'd1	:	character_x = 	16'b0000000000000000;
+                    5'd2	:	character_x = 	16'b0000000011100000;
+                    5'd3	:	character_x = 	16'b0000000100010000;
+                    5'd4	:	character_x = 	16'b0000000100010000;
+                    5'd5	:	character_x = 	16'b0000000100010000;
+                    5'd6	:	character_x = 	16'b0000000011100000;
+                    5'd7	:	character_x = 	16'b0000000000000000;
+                    5'd8	:	character_x = 	16'b0000000000000000;
+                    5'd9	:	character_x = 	16'b0000000000000000;
+                    5'd10	:	character_x = 	16'b0000000000000000;
+                    5'd11	:	character_x = 	16'b0000000000000000;
+                    5'd12	:	character_x = 	16'b0000000000000000;
+                    5'd13	:	character_x = 	16'b0000000000000000;
+                    5'd14	:	character_x = 	16'b0000000000000000;
+                    5'd15	:	character_x = 	16'b0000000000000000;
+                    5'd16	:	character_x = 	16'b0000000000000000;
+                    5'd17	:	character_x = 	16'b0000000000000000;
+                    5'd18	:	character_x = 	16'b0000000000000000;
+                    5'd19	:	character_x = 	16'b0000000000000000;
+                    5'd20	:	character_x = 	16'b0000000000000000;
+                    5'd21	:	character_x = 	16'b0000000000000000;
+                    5'd22	:	character_x = 	16'b0000000000000000;
+                    5'd23	:	character_x = 	16'b0000000000000000;
+                    5'd24	:	character_x = 	16'b0000000000000000;
+                    5'd25	:	character_x = 	16'b0000000000000000;
+                    5'd26	:	character_x = 	16'b0000000000000000;
+                    5'd27	:	character_x = 	16'b0000000000000000;
+                    5'd28	:	character_x = 	16'b0000000000000000;
+                    5'd29	:	character_x = 	16'b0000000000000000;
+                    5'd30	:	character_x = 	16'b0000000000000000;
+                    5'd31	:	character_x = 	16'b0000000000000000;
                     default:    character_x =   16'b0000000000000000;
                 endcase
             4'hc    :
