@@ -56,22 +56,32 @@ module DE10_Standard(
 
 	//ADC Values
 	wire [11:0] adc_values [7:0];
+
+	// Temperature Control
 	wire [10:0] temp_c;
 	wire [11:0] temp_f;
-	wire [1:0] temp_control_status;
-	reg [7:0] SET_TEMP_F = 8'd72;
-	reg [7:0] SET_HUM = 8'd50;
-	wire [1:0] temp_adjust;
-	wire [1:0] hum_adjust;
-	wire [2:0] time_adjust;
-	wire [3:0] menu_state;
-	wire [5:0] seconds;
-	wire [5:0] minutes;
-	wire [4:0] hours;
-	wire [2:0] sunrise_time_adjust;
-	reg [4:0] sunrise_hours;
-	reg [5:0] sunrise_minutes;
-	assign LEDR[3:0] = menu_state;
+	wire [1:0] temp_control_status;	// controls heating/cooling/idle output
+	reg [7:0] SET_TEMP_F = 8'd72;	//setpoint for temperature control
+	wire [1:0] temp_adjust;	//controls SET_TEMP_F value
+
+	// Humidity Control
+	wire [7:0] hum;	//actual humidity read from adc reading
+	wire [1:0] hum_control_status;	//controls humidify/dehumidify/idle output
+	reg [7:0] SET_HUM = 8'd50;	// setpoint for humidity control
+	wire [1:0] hum_adjust;		// controls SET_HUM value
+
+	// Time
+	wire [2:0] time_adjust;	// controls add/subtract minutes/hours
+	wire [5:0] seconds;	//seconds for time keeping
+	wire [5:0] minutes;	//minutes for time keeping
+	wire [4:0] hours;	//hours for time keeping
+	wire [2:0] sunrise_time_adjust;	//controls add/subtract minutes/hours for sunrise time
+	reg [4:0] sunrise_hours;		// hours for sunrise time
+	reg [5:0] sunrise_minutes;		// minutes for sunrise time
+
+	// Menu
+	wire [3:0] menu_state;	// State of the menu (what is selected to be edited)
+	assign LEDR[3:0] = menu_state;	// LEDs show menu state (for testing)
 
 //=======================================================
 //  Structural coding
@@ -113,97 +123,106 @@ module DE10_Standard(
 		.status(temp_control_status)
 	);
 
-display_controller display(
-	.CLOCK_50(CLOCK_50),
-	.TEMP_F(SET_HUM),
-	.SET_TEMP_F(SET_TEMP_F),
-	.TEMP_STATUS(temp_control_status),
-	.HUM(SW[7:0]),
-	.SET_HUM(SET_HUM),
-	.HUM_STATUS(SW[1:0]),
-	.SW(SW),
-	.TIME_HOURS(hours),
-	.TIME_MINUTES(minutes),
-	.MENU_STATE(menu_state),
-	.VGA_BLANK_N(VGA_BLANK_N),
-	.VGA_CLK(VGA_CLK),
-	.VGA_R(VGA_R),
-	.VGA_G(VGA_G),
-    .VGA_B(VGA_B),
-	.VGA_VS(VGA_VS),
-    .VGA_HS(VGA_HS)
-);
+	//TODO: Change .hum to actual ADC reading
+	hum_control humidity_controller(
+		.hum(SET_TEMP_F),
+		.set_hum(SET_HUM),
+		.status(hum_control_status)
+	);
 
-adc_controller ADC (
-	.CLOCK (CLOCK_50),
-	.RESET (!KEY[0]),
-	.ADC_SCLK (ADC_SCLK),
-	.ADC_CS_N (ADC_CONVST),
-	.ADC_DOUT (ADC_DOUT),
-	.ADC_DIN (ADC_DIN),
-	.CH0 (adc_values[0]),
-	.CH1 (adc_values[1]),
-	.CH2 (adc_values[2]),
-	.CH3 (adc_values[3]),
-	.CH4 (adc_values[4]),
-	.CH5 (adc_values[5]),
-	.CH6 (adc_values[6]),
-	.CH7 (adc_values[7])
-);
+	//TODO: Change .TEMP_F to actual ADC reading
+	//TODO: Change .HUM to actual ADC reading
+	display_controller display(
+		.CLOCK_50(CLOCK_50),
+		.TEMP_F(SET_HUM),
+		.SET_TEMP_F(SET_TEMP_F),
+		.TEMP_STATUS(temp_control_status),
+		.HUM(SET_TEMP_F),
+		.SET_HUM(SET_HUM),
+		.HUM_STATUS(hum_control_status),
+		.SW(SW),
+		.TIME_HOURS(hours),
+		.TIME_MINUTES(minutes),
+		.MENU_STATE(menu_state),
+		.VGA_BLANK_N(VGA_BLANK_N),
+		.VGA_CLK(VGA_CLK),
+		.VGA_R(VGA_R),
+		.VGA_G(VGA_G),
+		.VGA_B(VGA_B),
+		.VGA_VS(VGA_VS),
+		.VGA_HS(VGA_HS)
+	);
 
-voltage_to_temp v_to_temp (
-	.clk (CLOCK_50),
-	.voltage (adc_values [0]),
-	.temp_c_signed(temp_c),
-	.temp_f_signed(temp_f)
-);
+	adc_controller ADC (
+		.CLOCK (CLOCK_50),
+		.RESET (!KEY[0]),
+		.ADC_SCLK (ADC_SCLK),
+		.ADC_CS_N (ADC_CONVST),
+		.ADC_DOUT (ADC_DOUT),
+		.ADC_DIN (ADC_DIN),
+		.CH0 (adc_values[0]),
+		.CH1 (adc_values[1]),
+		.CH2 (adc_values[2]),
+		.CH3 (adc_values[3]),
+		.CH4 (adc_values[4]),
+		.CH5 (adc_values[5]),
+		.CH6 (adc_values[6]),
+		.CH7 (adc_values[7])
+	);
 
-timekeeper time_keeper(
-	.clk(CLOCK_50),
-	.time_adjust(time_adjust),
-	.seconds(seconds),
-	.minutes(minutes),
-	.hours(hours)
-);
+	voltage_to_temp v_to_temp (
+		.clk (CLOCK_50),
+		.voltage (adc_values [0]),
+		.temp_c_signed(temp_c),
+		.temp_f_signed(temp_f)
+	);
 
-wire [7:0] seconds_bcd, minutes_bcd, hours_bcd;
-bin2bcd timebcd(seconds, seconds_bcd);
-val_to_seven_seg hex0 (
-	.clk (CLOCK_50),
-	.value (seconds_bcd[3:0]),
-	.display_segs (HEX0)
-);
+	timekeeper time_keeper(
+		.clk(CLOCK_50),
+		.time_adjust(time_adjust),
+		.seconds(seconds),
+		.minutes(minutes),
+		.hours(hours)
+	);
 
-val_to_seven_seg hex1 (
-	.clk (CLOCK_50),
-	.value (seconds_bcd[7:4]),
-	.display_segs (HEX1)
-);
+	wire [7:0] seconds_bcd, minutes_bcd, hours_bcd;
+	bin2bcd timebcd(seconds, seconds_bcd);
+	val_to_seven_seg hex0 (
+		.clk (CLOCK_50),
+		.value (seconds_bcd[3:0]),
+		.display_segs (HEX0)
+	);
 
-bin2bcd(minutes, minutes_bcd);
-val_to_seven_seg hex2 (
-	.clk (CLOCK_50),
-	.value (minutes_bcd[3:0]),
-	.display_segs (HEX2)
-);
+	val_to_seven_seg hex1 (
+		.clk (CLOCK_50),
+		.value (seconds_bcd[7:4]),
+		.display_segs (HEX1)
+	);
 
-val_to_seven_seg hex3 (
-	.clk (CLOCK_50),
-	.value (minutes_bcd[7:4]),
-	.display_segs (HEX3)
-);
+	bin2bcd(minutes, minutes_bcd);
+	val_to_seven_seg hex2 (
+		.clk (CLOCK_50),
+		.value (minutes_bcd[3:0]),
+		.display_segs (HEX2)
+	);
 
-bin2bcd(hours, hours_bcd);
-val_to_seven_seg hex4 (
-	.clk (CLOCK_50),
-	.value (hours_bcd[3:0]),
-	.display_segs (HEX4)
-);
+	val_to_seven_seg hex3 (
+		.clk (CLOCK_50),
+		.value (minutes_bcd[7:4]),
+		.display_segs (HEX3)
+	);
 
-val_to_seven_seg hex5 (
-	.clk (CLOCK_50),
-	.value (hours_bcd[7:4]),
-	.display_segs (HEX5)
-);
+	bin2bcd(hours, hours_bcd);
+	val_to_seven_seg hex4 (
+		.clk (CLOCK_50),
+		.value (hours_bcd[3:0]),
+		.display_segs (HEX4)
+	);
+
+	val_to_seven_seg hex5 (
+		.clk (CLOCK_50),
+		.value (hours_bcd[7:4]),
+		.display_segs (HEX5)
+	);
 
 endmodule
