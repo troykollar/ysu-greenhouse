@@ -76,8 +76,8 @@ module DE10_Standard(
 	wire [5:0] minutes;	//minutes for time keeping
 	wire [4:0] hours;	//hours for time keeping
 	wire [2:0] sunrise_time_adjust;	//controls add/subtract minutes/hours for sunrise time
-	reg [4:0] sunrise_hours;		// hours for sunrise time
-	reg [5:0] sunrise_minutes;		// minutes for sunrise time
+	wire [4:0] sunrise_hours;		// hours for sunrise time
+	wire [5:0] sunrise_minutes;		// minutes for sunrise time
 
 	// Menu
 	wire [3:0] menu_state;	// State of the menu (what is selected to be edited)
@@ -100,6 +100,7 @@ module DE10_Standard(
 		.sunrise_time_adjust(sunrise_time_adjust)
 	);
 
+	// Contol set temp
 	always @(posedge CLOCK_50)
 		if (temp_adjust == 2'd1)
 			SET_TEMP_F <= SET_TEMP_F + 1;
@@ -108,6 +109,7 @@ module DE10_Standard(
 		else
 			SET_TEMP_F <= SET_TEMP_F;
 
+	// Control set hum
 	always @(posedge CLOCK_50)
 		if (hum_adjust == 2'd1)
 			SET_HUM <= SET_HUM + 1;
@@ -115,6 +117,14 @@ module DE10_Standard(
 			SET_HUM <= SET_HUM - 1;
 		else
 			SET_HUM <= SET_HUM;
+
+	// Control sunrise time
+	sunrise_time_controller(
+		.clk(CLOCK_50),
+		.sunrise_time_adjust(sunrise_time_adjust),
+		.sunrise_hours(sunrise_hours),
+		.sunrise_minutes(sunrise_minutes)
+	);
 
 	//TODO: Change temp_f_signed to actual ADC reading
 	temp_control temperature_controller(
@@ -143,6 +153,8 @@ module DE10_Standard(
 		.SW(SW),
 		.TIME_HOURS(hours),
 		.TIME_MINUTES(minutes),
+		.SUNRISE_HOURS(sunrise_hours),
+		.SUNRISE_MINUTES(sunrise_minutes),
 		.MENU_STATE(menu_state),
 		.VGA_BLANK_N(VGA_BLANK_N),
 		.VGA_CLK(VGA_CLK),
