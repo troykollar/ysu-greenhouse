@@ -126,9 +126,7 @@ module display_controller(
         // Numeric Digits of ACTUAL TEMP reading
         wire on_actual_temp_display;
         temp_display #(.x1(ACTUAL_TEMP_X), .y1(TEMP_DISPLAY_HEIGHT)) actual_temp(
-            .temp_value_100(TEMP_F[11:8]),
-            .temp_value_10(TEMP_F[7:4]),
-            .temp_value_1(TEMP_F[3:0]),
+            .temp_value(TEMP_F),
             .x(x),
             .y(y),
             .on_temp_display(on_actual_temp_display)
@@ -148,12 +146,8 @@ module display_controller(
         );
         // Numeric Digits of SET TEMP display
         wire on_set_temp_display;
-        wire [11:0] SET_TEMP_BCD;
-        bin2bcd set_tempbcd(SET_TEMP_F, SET_TEMP_BCD);
         temp_display #(.x1(SET_TEMP_X), .y1(TEMP_DISPLAY_HEIGHT)) set_temp(
-            .temp_value_100(SET_TEMP_BCD[11:8]),
-            .temp_value_10(SET_TEMP_BCD[7:4]),
-            .temp_value_1(SET_TEMP_BCD[3:0]),
+            .temp_value(SET_TEMP_F),
             .x(x),
             .y(y),
             .on_temp_display(on_set_temp_display)
@@ -206,8 +200,7 @@ module display_controller(
         // Numeric Digits of ACTUAL HUM reading
         wire on_actual_hum_display;
         hum_display #(.x1(ACTUAL_HUM_X), .y1(HUM_DISPLAY_HEIGHT)) actual_hum(
-            .hum_value_10(HUM[7:4]),
-            .hum_value_1(HUM[3:0]),
+            .hum_value(HUM),
             .x(x),
             .y(y),
             .on_hum_display(on_actual_hum_display)
@@ -227,11 +220,8 @@ module display_controller(
         );
         // Numeric Digits of SET HUM
         wire on_set_hum_display;
-        wire [7:0] SET_HUM_BCD;
-        bin2bcd(SET_HUM, SET_HUM_BCD);
         hum_display #(.x1(SET_HUM_X), .y1(HUM_DISPLAY_HEIGHT)) set_hum(
-            .hum_value_10(SET_HUM_BCD[7:4]),
-            .hum_value_1(SET_HUM_BCD[3:0]),
+            .hum_value(SET_HUM),
             .x(x),
             .y(y),
             .on_hum_display(on_set_hum_display)

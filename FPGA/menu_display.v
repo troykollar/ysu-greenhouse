@@ -28,13 +28,9 @@ module menu_display #(
         .pixel(on_temp_text)
     );
 
-    wire [11:0] temp_bcd;
     wire on_temp;
-    bin2bcd(set_temp, temp_bcd);
     temp_display #(.x1(x1), .y1(y1)) temp(
-        .temp_value_100(temp_bcd[11:8]),
-        .temp_value_10(temp_bcd[7:4]),
-        .temp_value_1(temp_bcd[3:0]),
+        .temp_value(set_temp),
         .x(x),
         .y(y),
         .on_temp_display(on_temp)
@@ -50,12 +46,9 @@ module menu_display #(
         .pixel(on_hum_text)
     );
 
-    wire [7:0] hum_bcd;
     wire on_hum;
-    bin2bcd(set_hum, hum_bcd);
     hum_display #(.x1(x1 + spacing), .y1(y1)) hum(
-        .hum_value_10(hum_bcd[7:4]),
-        .hum_value_1(hum_bcd[3:0]),
+        .hum_value(set_hum),
         .x(x),
         .y(y),
         .on_hum_display(on_hum)
