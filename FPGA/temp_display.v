@@ -11,12 +11,13 @@ module temp_display #(
     parameter digit_2_x1 = x1;
     parameter digit_1_x1 = digit_2_x1 + 16;
     parameter digit_0_x1 = digit_1_x1 + 16;
+    parameter degrees_symbol_x1 = digit_0_x1 + 10;
 
     wire [11:0] temp_value_bcd;
     bin2bcd(temp_value, temp_value_bcd);
 
-    wire on_hundreds, on_tens, on_ones;
-    assign on_temp_display = (on_hundreds || on_tens || on_ones);
+    wire on_hundreds, on_tens, on_ones, on_degrees_symbol;
+    assign on_temp_display = (on_hundreds || on_tens || on_ones || on_degrees_symbol);
 
     font16x32 #(.x1(digit_2_x1), .y1(y1)) hundreds_place(
         .character_code(temp_value_bcd[11:8]),
@@ -37,6 +38,13 @@ module temp_display #(
         .x(x),
         .y(y),
         .on_char(on_ones)
+    );
+
+    font16x32 #(.x1(degrees_symbol_x1), .y1(y1)) degrees_symbol(
+        .character_code(4'hb),
+        .x(x),
+        .y(y),
+        .on_char(on_degrees_symbol)
     );
 
 endmodule // temp_display

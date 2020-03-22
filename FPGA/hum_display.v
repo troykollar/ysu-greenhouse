@@ -11,9 +11,10 @@ module hum_display #(
     parameter digit_2_x1 = x1;
     parameter digit_1_x1 = digit_2_x1 + 16;
     parameter digit_0_x1 = digit_1_x1 + 16;
+    parameter percent_symbol_x1 = digit_0_x1 + 16;
 
-    wire on_tens, on_ones;
-    assign on_hum_display = (on_tens || on_ones);
+    wire on_tens, on_ones, on_percent_symbol;
+    assign on_hum_display = (on_tens || on_ones || on_percent_symbol);
 
     wire [11:0] hum_value_bcd;
     bin2bcd(hum_value, hum_value_bcd);
@@ -30,6 +31,13 @@ module hum_display #(
         .x(x),
         .y(y),
         .on_char(on_ones)
+    );
+
+    font16x32 #(.x1(digit_0_x1), .y1(y1)) percent_symbol(
+        .character_code(4'ha),
+        .x(x),
+        .y(y),
+        .on_char(on_percent_symbol)
     );
 
 endmodule // temp_display
